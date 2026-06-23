@@ -9,11 +9,13 @@ import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage({ params }) {
-  const { products, reviews, updateReviews, addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
+  const { products, reviews, updateReviews, addToCart, toggleWishlist, isInWishlist, isInCart, siteLoaded } = useStore();
   const router = useRouter();
   const product = products.find((p) => p.id === Number(params.id));
   const [selectedStorage, setSelectedStorage] = useState(product?.storage[0]);
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
+
+  if (!siteLoaded) return <div className="mx-auto max-w-7xl px-4 py-20 text-center text-sm" style={{ color: "var(--muted-foreground)" }}>Loading...</div>;
 
   const [fbName, setFbName] = useState("");
   const [fbRating, setFbRating] = useState(0);
