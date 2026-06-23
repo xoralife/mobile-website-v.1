@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStore } from "@/lib/store";
-import { Search, ShoppingCart, Heart, Menu, Sun, Moon, X } from "lucide-react";
+import { Search, ShoppingCart, Heart, Menu, Sun, Moon, X, Shield } from "lucide-react";
 import { useState } from "react";
 
 export default function Header() {
@@ -39,6 +39,9 @@ export default function Header() {
           </Link>
           <Link href="/products?category=midrange" className="text-sm font-medium transition-colors hover:text-teal-600 dark:hover:text-teal-400">
             Mid-Range
+          </Link>
+          <Link href="/admin" className="flex items-center gap-1 text-sm font-medium transition-colors hover:text-teal-600 dark:hover:text-teal-400">
+            <Shield className="h-3.5 w-3.5" /> Admin
           </Link>
         </nav>
 
@@ -110,6 +113,7 @@ export default function Header() {
             <Link href="/cart" className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-teal-50 dark:hover:bg-teal-950/30" onClick={() => setMenuOpen(false)}>Cart {mounted && cartCount > 0 && `(${cartCount})`}</Link>
             <Link href="/wishlist" className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-teal-50 dark:hover:bg-teal-950/30" onClick={() => setMenuOpen(false)}>Wishlist {mounted && wishlist.length > 0 && `(${wishlist.length})`}</Link>
             <Link href="/account" className="rounded-lg px-3 py-2 text-sm font-medium hover:bg-teal-50 dark:hover:bg-teal-950/30" onClick={() => setMenuOpen(false)}>Account</Link>
+            <Link href="/admin" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-teal-50 dark:hover:bg-teal-950/30" onClick={() => setMenuOpen(false)}><Shield className="h-3.5 w-3.5" /> Admin</Link>
             <button onClick={toggleTheme} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-teal-50 dark:hover:bg-teal-950/30">
               {theme === "dark" ? "Light Mode" : "Dark Mode"}
             </button>
