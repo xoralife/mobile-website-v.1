@@ -19,7 +19,10 @@ function StatCard({ icon: Icon, label, value, sub }) {
 }
 
 export default function AdminDashboard() {
-  const { products, brands, categories, reviews } = useStore();
+  const { products, brands, categories, reviews, siteLoaded } = useStore();
+
+  if (!siteLoaded) return <div className="py-20 text-center text-sm" style={{ color: "var(--muted-foreground)" }}>Loading dashboard...</div>;
+
   const totalProducts = products.length;
   const totalBrands = brands.length;
   const totalCategories = categories.length;

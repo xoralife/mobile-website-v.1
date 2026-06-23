@@ -11,20 +11,23 @@ const statusColors = {
   cancelled: "#ef4444",
 };
 
-const initialOrders = [
-  { id: "ORD-1001", customer: "Alex Chen", email: "alex@example.com", date: "2026-06-20", total: 1199, status: "delivered", items: [products[0]] },
-  { id: "ORD-1002", customer: "Sarah Johnson", email: "sarah@example.com", date: "2026-06-19", total: 2598, status: "shipped", items: [products[1], products[6]] },
-  { id: "ORD-1003", customer: "Mike Rivera", email: "mike@example.com", date: "2026-06-18", total: 799, status: "pending", items: [products[3]] },
-  { id: "ORD-1004", customer: "Emily Zhang", email: "emily@example.com", date: "2026-06-17", total: 999, status: "delivered", items: [products[4]] },
-  { id: "ORD-1005", customer: "David Park", email: "david@example.com", date: "2026-06-16", total: 349, status: "cancelled", items: [products[11]] },
-  { id: "ORD-1006", customer: "Lisa Thompson", email: "lisa@example.com", date: "2026-06-15", total: 599, status: "delivered", items: [products[5]] },
-  { id: "ORD-1007", customer: "James Wilson", email: "james@example.com", date: "2026-06-14", total: 999, status: "shipped", items: [products[16]] },
-  { id: "ORD-1008", customer: "Maria Garcia", email: "maria@example.com", date: "2026-06-13", total: 1099, status: "pending", items: [products[17]] },
-];
-
 export default function AdminOrders() {
-  const { products } = useStore();
-  const [orders, setOrders] = useState(initialOrders);
+  const { products, siteLoaded } = useStore();
+
+  if (!siteLoaded) return <div className="py-20 text-center text-sm" style={{ color: "var(--muted-foreground)" }}>Loading orders...</div>;
+
+  const getInitialOrders = () => [
+    { id: "ORD-1001", customer: "Alex Chen", email: "alex@example.com", date: "2026-06-20", total: 1199, status: "delivered", items: [products[0]].filter(Boolean) },
+    { id: "ORD-1002", customer: "Sarah Johnson", email: "sarah@example.com", date: "2026-06-19", total: 2598, status: "shipped", items: [products[1], products[6]].filter(Boolean) },
+    { id: "ORD-1003", customer: "Mike Rivera", email: "mike@example.com", date: "2026-06-18", total: 799, status: "pending", items: [products[3]].filter(Boolean) },
+    { id: "ORD-1004", customer: "Emily Zhang", email: "emily@example.com", date: "2026-06-17", total: 999, status: "delivered", items: [products[4]].filter(Boolean) },
+    { id: "ORD-1005", customer: "David Park", email: "david@example.com", date: "2026-06-16", total: 349, status: "cancelled", items: [products[11]].filter(Boolean) },
+    { id: "ORD-1006", customer: "Lisa Thompson", email: "lisa@example.com", date: "2026-06-15", total: 599, status: "delivered", items: [products[5]].filter(Boolean) },
+    { id: "ORD-1007", customer: "James Wilson", email: "james@example.com", date: "2026-06-14", total: 999, status: "shipped", items: [products[16]].filter(Boolean) },
+    { id: "ORD-1008", customer: "Maria Garcia", email: "maria@example.com", date: "2026-06-13", total: 1099, status: "pending", items: [products[17]].filter(Boolean) },
+  ];
+
+  const [orders, setOrders] = useState(getInitialOrders);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null);
   const [menuId, setMenuId] = useState(null);

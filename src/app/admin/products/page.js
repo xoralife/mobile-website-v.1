@@ -22,7 +22,7 @@ export default function AdminProducts() {
   );
 
   const resetForm = () => {
-    setForm(emptyProduct);
+    setForm(getEmptyProduct());
     setEditing(null);
     setShowForm(false);
   };
