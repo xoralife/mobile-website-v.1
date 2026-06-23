@@ -3,17 +3,41 @@
 import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronLeft, Heart, ShoppingCart, Check, Truck, Shield, RotateCcw } from "lucide-react";
+import { ChevronLeft, Heart, ShoppingCart, Check, Truck, Shield, RotateCcw, Star, Send } from "lucide-react";
 import { useStore } from "@/lib/store";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage({ params }) {
-  const { products, reviews, addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
+  const { products, reviews, updateReviews, addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
   const router = useRouter();
   const product = products.find((p) => p.id === Number(params.id));
   const [selectedStorage, setSelectedStorage] = useState(product?.storage[0]);
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
+
+  const [fbName, setFbName] = useState("");
+  const [fbRating, setFbRating] = useState(0);
+  const [fbText, setFbText] = useState("");
+  const [fbSubmitted, setFbSubmitted] = useState(false);
+
+  const handleFeedback = (e) => {
+    e.preventDefault();
+    if (!fbName.trim() || !fbText.trim() || fbRating === 0) return;
+    const newReview = {
+      id: Date.now(),
+      name: fbName.trim(),
+      avatar: fbName.trim().split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2),
+      rating: fbRating,
+      text: fbText.trim(),
+      product: product.name,
+      date: "Just now",
+    };
+    updateReviews([...reviews, newReview]);
+    setFbName("");
+    setFbRating(0);
+    setFbText("");
+    setFbSubmitted(true);
+  };
 
   if (!product) notFound();
 
@@ -196,10 +220,11 @@ export default function ProductDetailPage({ params }) {
         </div>
       </div>
 
-      {productReviews.length > 0 && (
-        <div className="mb-14">
-          <h2 className="mb-6 text-lg font-semibold tracking-tight">Customer Reviews</h2>
-          <div className="grid gap-4 sm:grid-cols-2">
+      <div className="mb-14">
+        <h2 className="mb-6 text-lg font-semibold tracking-tight">Customer Reviews ({productReviews.length})</h2>
+
+        {productReviews.length > 0 && (
+          <div className="mb-8 grid gap-4 sm:grid-cols-2">
             {productReviews.map((review) => (
               <div key={review.id} className="rounded-xl border bg-white p-5 dark:bg-zinc-900/50" style={{ borderColor: "var(--card-border)" }}>
                 <div className="mb-2 flex items-center gap-3">
@@ -218,8 +243,53 @@ export default function ProductDetailPage({ params }) {
               </div>
             ))}
           </div>
+        )}
+
+        <div className="rounded-xl border p-5 sm:p-6" style={{ borderColor: "var(--card-border)", background: "var(--card)" }}>
+          <h3 className="mb-4 text-base font-semibold">Write a Review</h3>
+          {fbSubmitted ? (
+            <div className="flex items-center gap-3 rounded-lg py-4 text-sm" style={{ color: "var(--accent)" }}>
+              <Check size="18" />
+              <span className="font-medium">Thank you! Your review has been submitted.</span>
+            </div>
+          ) : (
+            <form onSubmit={handleFeedback} className="space-y-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Your Name</label>
+                <input type="text" value={fbName} onChange={(e) => setFbName(e.target.value)} placeholder="Enter your name" required
+                  className="w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none"
+                  style={{ borderColor: "var(--border)", background: "var(--muted)", color: "var(--foreground)" }} />
+              </div>
+
+              <div>
+                <label className="mb-2 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Rating</label>
+                <div className="flex gap-1">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button key={star} type="button" onClick={() => setFbRating(star)}
+                      className="rounded-md p-1 transition-colors hover:scale-110">
+                      <Star size="22" className={star <= fbRating ? "fill-current" : ""}
+                        style={{ color: star <= fbRating ? "var(--star)" : "var(--border)" }} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Your Review</label>
+                <textarea rows={3} value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="Share your experience..." required
+                  className="w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none resize-none"
+                  style={{ borderColor: "var(--border)", background: "var(--muted)", color: "var(--foreground)" }} />
+              </div>
+
+              <button type="submit"
+                className="flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                style={{ background: fbName.trim() && fbText.trim() && fbRating > 0 ? "var(--accent)" : "var(--muted-foreground)" }}>
+                <Send size="15" /> Submit Review
+              </button>
+            </form>
+          )}
         </div>
-      )}
+      </div>
 
       <div className="mb-14">
         <h2 className="mb-6 text-lg font-semibold tracking-tight">Related Products</h2>
