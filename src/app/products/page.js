@@ -19,10 +19,20 @@ function ProductsContent() {
     maxPrice: searchParams.get("maxPrice") || "",
     storage: searchParams.get("storage") || "",
     sort: searchParams.get("sort") || "newest",
+    search: searchParams.get("search") || "",
   };
 
   let filtered = [...products];
 
+  if (filters.search) {
+    const q = filters.search.toLowerCase();
+    filtered = filtered.filter(
+      (p) =>
+        p.name.toLowerCase().includes(q) ||
+        p.brand.toLowerCase().includes(q) ||
+        p.description.toLowerCase().includes(q)
+    );
+  }
   if (filters.category) {
     filtered = filtered.filter((p) => p.category === filters.category);
   }
