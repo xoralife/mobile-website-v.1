@@ -1,7 +1,7 @@
 "use client";
 
-import { products, brands, categories, reviews } from "@/lib/data";
 import { Package, ShoppingBag, Users, Star, DollarSign, TrendingUp } from "lucide-react";
+import { useStore } from "@/lib/store";
 
 function StatCard({ icon: Icon, label, value, sub }) {
   return (
@@ -19,6 +19,7 @@ function StatCard({ icon: Icon, label, value, sub }) {
 }
 
 export default function AdminDashboard() {
+  const { products, brands, categories, reviews } = useStore();
   const totalProducts = products.length;
   const totalBrands = brands.length;
   const totalCategories = categories.length;

@@ -4,13 +4,12 @@ import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronLeft, Heart, ShoppingCart, Check, Truck, Shield, RotateCcw } from "lucide-react";
-import { products, reviews } from "@/lib/data";
 import { useStore } from "@/lib/store";
 import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage({ params }) {
-  const { addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
+  const { products, reviews, addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
   const router = useRouter();
   const product = products.find((p) => p.id === Number(params.id));
   const [selectedStorage, setSelectedStorage] = useState(product?.storage[0]);

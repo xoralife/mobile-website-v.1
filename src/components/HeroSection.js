@@ -3,47 +3,26 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
-
-const slides = [
-  {
-    title: "iPhone 16 Pro Max",
-    subtitle: "The ultimate iPhone experience",
-    description: "A18 Pro chip · 48MP camera · All-day battery",
-    cta: "Shop Now",
-    link: "/products/1",
-    gradient: "linear-gradient(135deg, #0d1f1d 0%, #13433d 50%, #0d9488 100%)",
-  },
-  {
-    title: "Galaxy S25 Ultra",
-    subtitle: "Galaxy AI is here",
-    description: "S Pen · 200MP camera · Snapdragon 8 Gen 4",
-    cta: "Explore",
-    link: "/products/2",
-    gradient: "linear-gradient(135deg, #0d1f1d 0%, #1a3c34 50%, #115e59 100%)",
-  },
-  {
-    title: "Pixel 10 Pro",
-    subtitle: "Google AI at your fingertips",
-    description: "Tensor G5 · 7 years of updates · Best camera",
-    cta: "Discover",
-    link: "/products/5",
-    gradient: "linear-gradient(135deg, #0d1f1d 0%, #0f766e 50%, #14b8a6 100%)",
-  },
-];
+import { useStore } from "@/lib/store";
 
 export default function HeroSection() {
+  const { heroSlides, siteLoaded } = useStore();
   const [current, setCurrent] = useState(0);
+  const activeSlides = heroSlides.filter((s) => s.active);
 
   useEffect(() => {
-    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % slides.length), 6000);
+    if (activeSlides.length < 2) return;
+    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % activeSlides.length), 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [activeSlides.length]);
+
+  if (!siteLoaded || activeSlides.length === 0) return null;
 
   return (
     <section className="relative overflow-hidden rounded-2xl" style={{ minHeight: "440px" }}>
-      {slides.map((slide, i) => (
+      {activeSlides.map((slide, i) => (
         <div
-          key={i}
+          key={slide.id}
           className="absolute inset-0 flex items-center transition-all duration-700 ease-out"
           style={{
             opacity: i === current ? 1 : 0,
@@ -74,7 +53,7 @@ export default function HeroSection() {
       ))}
 
       <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
-        {slides.map((_, i) => (
+        {activeSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}

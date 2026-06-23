@@ -2,9 +2,10 @@
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { X } from "lucide-react";
-import { brands, categories } from "@/lib/data";
+import { useStore } from "@/lib/store";
 
 export default function FilterSidebar({ open, onClose }) {
+  const { brands, categories } = useStore();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

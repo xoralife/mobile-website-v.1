@@ -6,9 +6,10 @@ import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
 import FilterSidebar from "@/components/FilterSidebar";
-import { products, brands, categories } from "@/lib/data";
+import { useStore } from "@/lib/store";
 
 function ProductsContent() {
+  const { products, brands, categories } = useStore();
   const searchParams = useSearchParams();
   const [filterOpen, setFilterOpen] = useState(false);
 

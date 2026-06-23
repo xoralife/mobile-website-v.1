@@ -1,22 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { products as initialProducts, brands, categories } from "@/lib/data";
 import { Plus, Pencil, Trash2, X, Check, Search } from "lucide-react";
-
-const emptyProduct = {
-  name: "", brand: brands[0].id, category: categories[0].id,
-  price: "", originalPrice: "", rating: "", reviews: "",
-  image: "", colors: [], storage: [], badge: "", inStock: true,
-  description: "", specs: { Display: "", Processor: "", RAM: "", Battery: "", Camera: "", OS: "" },
-};
+import { useStore } from "@/lib/store";
 
 export default function AdminProducts() {
-  const [products, setProducts] = useState(initialProducts);
+  const { products, brands, categories, updateProducts } = useStore();
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(emptyProduct);
+  const getEmptyProduct = () => ({
+    name: "", brand: brands[0]?.id || "", category: categories[0]?.id || "",
+    price: "", originalPrice: "", rating: "", reviews: "",
+    image: "", colors: [], storage: [], badge: "", inStock: true,
+    description: "", specs: { Display: "", Processor: "", RAM: "", Battery: "", Camera: "", OS: "" },
+  });
+  const [form, setForm] = useState(getEmptyProduct);
 
   const filtered = products.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase())

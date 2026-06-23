@@ -5,16 +5,12 @@ import { ArrowRight, Truck, Shield, HeadphonesIcon, RotateCcw } from "lucide-rea
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import ReviewCard from "@/components/ReviewCard";
-import { products, categories, brands, reviews } from "@/lib/data";
+import { useStore } from "@/lib/store";
 
-const features = [
-  { icon: Truck, title: "Free Shipping", desc: "On orders over $50" },
-  { icon: Shield, title: "2 Year Warranty", desc: "Full coverage included" },
-  { icon: HeadphonesIcon, title: "24/7 Support", desc: "We're here to help" },
-  { icon: RotateCcw, title: "30-Day Returns", desc: "No questions asked" },
-];
+const iconMap = { Truck, Shield, HeadphonesIcon, RotateCcw };
 
 export default function HomePage() {
+  const { products, categories, brands, reviews, features } = useStore();
   const bestSellers = products.filter((p) => p.badge === "Best Seller" || p.badge === "Popular" || p.badge === "Most Popular");
   const newArrivals = products.filter((p) => p.badge === "New" || p.id > 10);
   const saleProducts = products.filter((p) => p.originalPrice > p.price).slice(0, 4);
@@ -26,21 +22,24 @@ export default function HomePage() {
       </section>
 
       <section className="mb-14 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="flex flex-col items-center rounded-xl border bg-white p-5 text-center dark:bg-zinc-900/50"
-            style={{ borderColor: "var(--card-border)" }}
-          >
-            <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: "var(--muted)" }}>
-              <f.icon size={18} style={{ color: "var(--accent)" }} />
+        {features.map((f) => {
+          const Icon = iconMap[f.icon] || Truck;
+          return (
+            <div
+              key={f.id}
+              className="flex flex-col items-center rounded-xl border bg-white p-5 text-center dark:bg-zinc-900/50"
+              style={{ borderColor: "var(--card-border)" }}
+            >
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg" style={{ background: "var(--muted)" }}>
+                <Icon size={18} style={{ color: "var(--accent)" }} />
+              </div>
+              <p className="text-sm font-medium">{f.title}</p>
+              <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
+                {f.desc}
+              </p>
             </div>
-            <p className="text-sm font-medium">{f.title}</p>
-            <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
-              {f.desc}
-            </p>
-          </div>
-        ))}
+          );
+        })}
       </section>
 
       <section className="mb-14">

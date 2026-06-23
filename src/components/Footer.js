@@ -1,6 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useStore } from "@/lib/store";
 
 export default function Footer() {
+  const { settings } = useStore();
+
   return (
     <footer className="border-t" style={{ borderColor: "var(--border)" }}>
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
@@ -8,12 +13,12 @@ export default function Footer() {
           <div>
             <div className="mb-4 flex items-center gap-2.5">
               <div className="flex h-7 w-7 items-center justify-center rounded-md text-xs font-bold text-white" style={{ background: "var(--accent)" }}>
-                M
+                {settings.logo}
               </div>
-              <span className="text-base font-semibold tracking-tight">MobileShop</span>
+              <span className="text-base font-semibold tracking-tight">{settings.name}</span>
             </div>
             <p className="text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
-              Your trusted destination for the latest smartphones. Premium devices, expert service, and unbeatable prices.
+              {settings.about}
             </p>
           </div>
 
@@ -41,15 +46,15 @@ export default function Footer() {
           <div>
             <h3 className="mb-4 text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--muted-foreground)" }}>Contact</h3>
             <ul className="space-y-2.5 text-sm" style={{ color: "var(--muted-foreground)" }}>
-              <li>support@mobileshop.com</li>
-              <li>1-800-MOBILE</li>
-              <li>123 Tech Street, Silicon Valley, CA</li>
+              <li>{settings.email}</li>
+              <li>{settings.phone}</li>
+              <li>{settings.about}</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 border-t pt-8 text-center text-sm" style={{ borderColor: "var(--border)", color: "var(--muted-foreground)" }}>
-          <p>&copy; {new Date().getFullYear()} MobileShop. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} {settings.name}. All rights reserved.</p>
         </div>
       </div>
     </footer>
