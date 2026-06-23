@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, ShoppingBag, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Package, ShoppingBag, Image, Tags, Building2, Star, Settings, ChevronRight } from "lucide-react";
 
 const sidebarLinks = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/admin/hero", label: "Hero Slides", icon: Image },
   { href: "/admin/products", label: "Products", icon: Package },
+  { href: "/admin/categories", label: "Categories", icon: Tags },
+  { href: "/admin/brands", label: "Brands", icon: Building2 },
   { href: "/admin/orders", label: "Orders", icon: ShoppingBag },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export default function AdminLayout({ children }) {
