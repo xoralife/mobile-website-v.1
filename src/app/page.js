@@ -124,7 +124,7 @@ export default function HomePage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight">Trusted Brands</h2>
         </div>
-        <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-8">
           {brands.map((brand) => (
             <Link
               key={brand.id}

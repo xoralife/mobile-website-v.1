@@ -55,7 +55,7 @@ export default function AdminBrands() {
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-xl border" style={{ borderColor: "var(--card-border)" }}>
+      <div className="overflow-x-auto rounded-xl border" style={{ borderColor: "var(--card-border)" }}>
         <table className="w-full text-sm">
           <thead>
             <tr style={{ background: "var(--muted)" }}>

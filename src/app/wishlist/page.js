@@ -35,38 +35,38 @@ export default function WishlistPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <h1 className="mb-1.5 text-2xl font-bold tracking-tight">My Wishlist</h1>
-      <p className="mb-8 text-sm" style={{ color: "var(--muted-foreground)" }}>
+      <h1 className="mb-1.5 text-xl font-bold tracking-tight sm:text-2xl">My Wishlist</h1>
+      <p className="mb-6 text-sm sm:mb-8" style={{ color: "var(--muted-foreground)" }}>
         {wishlist.length} {wishlist.length === 1 ? "item" : "items"} saved
       </p>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {wishlist.map((product) => (
           <div
             key={product.id}
-            className="group relative overflow-hidden rounded-xl border bg-white p-4 dark:bg-zinc-900/50"
+            className="group relative overflow-hidden rounded-xl border bg-white p-3 dark:bg-zinc-900/50 sm:p-4"
             style={{ borderColor: "var(--card-border)" }}
           >
             <button
               onClick={() => toggleWishlist(product)}
-              className="absolute right-3 top-3 z-10 rounded-md p-1.5"
+              className="absolute right-2 top-2 z-10 rounded-md p-1.5 sm:right-3 sm:top-3"
               style={{ background: "var(--muted)" }}
             >
               <Heart size="14" className="fill-current" style={{ color: "var(--destructive)" }} />
             </button>
 
             <Link href={`/products/${product.id}`}>
-              <div className="mb-4 flex aspect-square items-center justify-center overflow-hidden rounded-lg" style={{ background: "var(--muted)" }}>
+              <div className="mb-3 flex aspect-square items-center justify-center overflow-hidden rounded-lg sm:mb-4" style={{ background: "var(--muted)" }}>
                 <img src={product.image} alt={product.name} className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
               </div>
-              <h3 className="mb-1 text-sm font-medium">{product.name}</h3>
-              <div className="mb-1.5 flex items-center gap-1">
-                <StarRating rating={product.rating} size="11" />
+              <h3 className="mb-1 text-xs font-medium sm:text-sm">{product.name}</h3>
+              <div className="mb-1 flex items-center gap-1">
+                <StarRating rating={product.rating} size="10" />
               </div>
-              <div className="mb-4 flex items-baseline gap-2">
-                <span className="text-base font-semibold" style={{ color: "var(--accent)" }}>${product.price}</span>
+              <div className="mb-3 flex items-baseline gap-1.5 sm:mb-4 sm:gap-2">
+                <span className="text-sm font-semibold sm:text-base" style={{ color: "var(--accent)" }}>${product.price}</span>
                 {product.originalPrice > product.price && (
-                  <span className="text-xs line-through" style={{ color: "var(--muted-foreground)" }}>${product.originalPrice}</span>
+                  <span className="text-[10px] line-through sm:text-xs" style={{ color: "var(--muted-foreground)" }}>${product.originalPrice}</span>
                 )}
               </div>
             </Link>
@@ -80,10 +80,10 @@ export default function WishlistPage() {
                 }
                 addToCart(product, product.storage[0], product.colors[0]);
               }}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium text-white transition-all hover:opacity-90"
+              className="flex w-full items-center justify-center gap-1 rounded-lg py-1.5 text-[11px] font-medium text-white transition-all hover:opacity-90 sm:gap-1.5 sm:py-2 sm:text-xs"
               style={{ background: "var(--accent)" }}
             >
-              {isInCart(product.id) ? <Check size="14" /> : <ShoppingCart size="14" />}
+              {isInCart(product.id) ? <Check size="13" /> : <ShoppingCart size="13" />}
               {isInCart(product.id) ? "In Cart" : "Add to Cart"}
             </button>
           </div>

@@ -36,21 +36,22 @@ export default function CartPage() {
   }
 
   const shipping = cartTotal >= 50 ? 0 : 5;
+  const itemCount = cart.reduce((s, i) => s + i.quantity, 0);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="mb-2 text-2xl font-bold tracking-tight">Shopping Cart</h1>
-      <p className="mb-8 text-sm" style={{ color: "var(--muted-foreground)" }}>
-        {cart.reduce((s, i) => s + i.quantity, 0)} {cart.reduce((s, i) => s + i.quantity, 0) === 1 ? "item" : "items"}
+      <h1 className="mb-2 text-xl font-bold tracking-tight sm:text-2xl">Shopping Cart</h1>
+      <p className="mb-6 text-sm sm:mb-8" style={{ color: "var(--muted-foreground)" }}>
+        {itemCount} {itemCount === 1 ? "item" : "items"}
       </p>
 
-      <div className="mb-8 space-y-3">
+      <div className="mb-6 space-y-3 sm:mb-8">
         {cart.map((item) => (
           <CartItem key={item.key} item={item} />
         ))}
       </div>
 
-      <div className="rounded-xl border bg-white p-6 dark:bg-zinc-900/50" style={{ borderColor: "var(--card-border)" }}>
+      <div className="rounded-xl border bg-white p-5 dark:bg-zinc-900/50 sm:p-6" style={{ borderColor: "var(--card-border)" }}>
         <div className="mb-4 space-y-2">
           <div className="flex justify-between text-sm">
             <span style={{ color: "var(--muted-foreground)" }}>Subtotal</span>

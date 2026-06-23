@@ -115,9 +115,9 @@ export default function AccountPage() {
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
       <h1 className="mb-8 text-2xl font-bold tracking-tight">My Account</h1>
 
-      <div className="grid gap-8 lg:grid-cols-4">
+      <div className="grid gap-6 lg:grid-cols-4 lg:gap-8">
         <div className="lg:col-span-1">
-          <nav className="space-y-1">
+          <nav className="flex gap-1 overflow-x-auto pb-2 lg:flex-col lg:pb-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}

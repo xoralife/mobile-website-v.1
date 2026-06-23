@@ -19,7 +19,7 @@ export default function HeroSection() {
   if (!siteLoaded || activeSlides.length === 0) return null;
 
   return (
-    <section className="relative overflow-hidden rounded-2xl" style={{ minHeight: "440px" }}>
+    <section className="relative overflow-hidden rounded-2xl" style={{ minHeight: "clamp(320px, 50vw, 440px)" }}>
       {activeSlides.map((slide, i) => (
         <div
           key={slide.id}
@@ -30,29 +30,29 @@ export default function HeroSection() {
             background: slide.gradient,
           }}
         >
-          <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
-            <div className="max-w-xl">
-              <span className="mb-4 inline-block rounded-full bg-white/10 px-3 py-1 text-[11px] font-medium uppercase tracking-wider text-white/80">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-8 lg:px-12">
+            <div className="max-w-lg lg:max-w-xl">
+              <span className="mb-3 inline-block rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-white/80 sm:px-3 sm:py-1 sm:text-[11px]">
                 New Arrival
               </span>
-              <h1 className="mb-3 text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="mb-2 text-2xl font-bold leading-tight tracking-tight text-white sm:mb-3 sm:text-4xl lg:text-5xl xl:text-6xl">
                 {slide.title}
               </h1>
-              <p className="mb-1 text-lg font-medium text-white/90">{slide.subtitle}</p>
-              <p className="mb-8 text-base text-white/60">{slide.description}</p>
+              <p className="mb-1 text-sm font-medium text-white/90 sm:text-base lg:text-lg">{slide.subtitle}</p>
+              <p className="mb-5 text-xs text-white/60 sm:mb-8 sm:text-sm lg:text-base">{slide.description}</p>
               <Link
                 href={slide.link}
-                className="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-zinc-900 transition-all hover:bg-white/90"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-xs font-medium text-zinc-900 transition-all hover:bg-white/90 sm:gap-2 sm:px-5 sm:py-2.5 sm:text-sm"
               >
                 {slide.cta}
-                <ArrowRight size={16} />
+                <ArrowRight size={14} className="sm:size-4" />
               </Link>
             </div>
           </div>
         </div>
       ))}
 
-      <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 gap-2">
+      <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:bottom-6">
         {activeSlides.map((_, i) => (
           <button
             key={i}
