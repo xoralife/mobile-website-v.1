@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Truck, Shield, HeadphonesIcon, RotateCcw } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, Truck, Shield, HeadphonesIcon, RotateCcw, Star, Send, Check } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import ReviewCard from "@/components/ReviewCard";
@@ -10,7 +11,30 @@ import { useStore } from "@/lib/store";
 const iconMap = { Truck, Shield, HeadphonesIcon, RotateCcw };
 
 export default function HomePage() {
-  const { products, categories, brands, reviews, features } = useStore();
+  const { products, categories, brands, reviews, features, updateReviews } = useStore();
+  const [fbName, setFbName] = useState("");
+  const [fbRating, setFbRating] = useState(0);
+  const [fbText, setFbText] = useState("");
+  const [fbSubmitted, setFbSubmitted] = useState(false);
+
+  const handleFeedback = (e) => {
+    e.preventDefault();
+    if (!fbName.trim() || !fbText.trim() || fbRating === 0) return;
+    const newReview = {
+      id: Date.now(),
+      name: fbName.trim(),
+      avatar: fbName.trim().split(" ").map((w) => w[0]).join("").toUpperCase().slice(0, 2),
+      rating: fbRating,
+      text: fbText.trim(),
+      product: "General Feedback",
+      date: "Just now",
+    };
+    updateReviews([...reviews, newReview]);
+    setFbName("");
+    setFbRating(0);
+    setFbText("");
+    setFbSubmitted(true);
+  };
   const bestSellers = products.filter((p) => p.badge === "Best Seller" || p.badge === "Popular" || p.badge === "Most Popular");
   const newArrivals = products.filter((p) => p.badge === "New" || p.id > 10);
   const saleProducts = products.filter((p) => p.originalPrice > p.price).slice(0, 4);
@@ -152,6 +176,65 @@ export default function HomePage() {
           {reviews.slice(0, 3).map((review) => (
             <ReviewCard key={review.id} review={review} />
           ))}
+        </div>
+      </section>
+
+      <section className="mb-14">
+        <div className="mx-auto max-w-lg">
+          <div className="rounded-xl border p-6 sm:p-8 text-center" style={{ borderColor: "var(--card-border)", background: "var(--card)" }}>
+            <h2 className="mb-1.5 text-xl font-semibold tracking-tight">Share Your Feedback</h2>
+            <p className="mb-6 text-sm" style={{ color: "var(--muted-foreground)" }}>Help us improve! Let us know what you think about our store.</p>
+
+            {fbSubmitted ? (
+              <div className="flex flex-col items-center gap-3 py-6">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full" style={{ background: "rgba(16,185,129,0.15)" }}>
+                  <Check size="24" style={{ color: "#10b981" }} />
+                </div>
+                <div>
+                  <p className="font-medium">Thank you for your feedback!</p>
+                  <p className="mt-0.5 text-sm" style={{ color: "var(--muted-foreground)" }}>We appreciate your support.</p>
+                </div>
+                <button onClick={() => setFbSubmitted(false)} className="mt-2 text-sm font-medium transition-colors hover:text-teal-600" style={{ color: "var(--accent)" }}>
+                  Write another review
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleFeedback} className="space-y-4 text-left">
+                <div>
+                  <label className="mb-1 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Your Name</label>
+                  <input type="text" value={fbName} onChange={(e) => setFbName(e.target.value)} placeholder="Enter your name" required
+                    className="w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none"
+                    style={{ borderColor: "var(--border)", background: "var(--muted)", color: "var(--foreground)" }} />
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Rating</label>
+                  <div className="flex justify-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button key={star} type="button" onClick={() => setFbRating(star)}
+                        className="rounded-md p-1 transition-all hover:scale-110">
+                        <Star size="24" className={star <= fbRating ? "fill-current" : ""}
+                          style={{ color: star <= fbRating ? "var(--star)" : "var(--border)" }} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1 block text-xs font-medium" style={{ color: "var(--muted-foreground)" }}>Your Message</label>
+                  <textarea rows={3} value={fbText} onChange={(e) => setFbText(e.target.value)} placeholder="Tell us about your experience..." required
+                    className="w-full rounded-lg border px-3.5 py-2.5 text-sm outline-none resize-none"
+                    style={{ borderColor: "var(--border)", background: "var(--muted)", color: "var(--foreground)" }} />
+                </div>
+
+                <button type="submit"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                  style={{ background: fbName.trim() && fbText.trim() && fbRating > 0 ? "var(--accent)" : "var(--muted-foreground)" }}>
+                  <Send size="15" /> Submit Feedback
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       </section>
     </div>
