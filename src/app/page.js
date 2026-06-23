@@ -1,14 +1,80 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowRight, Truck, Shield, HeadphonesIcon, RotateCcw, Star, Send, Check } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowRight, Truck, Shield, HeadphonesIcon, RotateCcw, Star, Send, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import ReviewCard from "@/components/ReviewCard";
+import StarRating from "@/components/StarRating";
 import { useStore } from "@/lib/store";
 
 const iconMap = { Truck, Shield, HeadphonesIcon, RotateCcw };
+
+function ReviewsCarousel({ reviews }) {
+  const [current, setCurrent] = useState(0);
+  const all = reviews.length;
+
+  useEffect(() => {
+    if (all < 2) return;
+    const timer = setInterval(() => setCurrent((prev) => (prev + 1) % all), 4000);
+    return () => clearInterval(timer);
+  }, [all]);
+
+  const prev = () => setCurrent((c) => (c === 0 ? all - 1 : c - 1));
+  const next = () => setCurrent((c) => (c + 1) % all);
+
+  if (all === 0) return <p className="py-8 text-center text-sm" style={{ color: "var(--muted-foreground)" }}>No reviews yet.</p>;
+
+  return (
+    <div className="relative">
+      <div className="overflow-hidden rounded-xl">
+        <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+          {reviews.map((review) => (
+            <div key={review.id} className="w-full shrink-0 px-1">
+              <div className="rounded-xl border bg-white p-6 dark:bg-zinc-900/50 h-full" style={{ borderColor: "var(--card-border)" }}>
+                <div className="mb-3 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full text-xs font-semibold text-white" style={{ background: "var(--accent)" }}>
+                    {review.avatar}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{review.name}</p>
+                    <p className="text-xs" style={{ color: "var(--muted-foreground)" }}>
+                      {review.product} &middot; {review.date}
+                    </p>
+                  </div>
+                </div>
+                <StarRating rating={review.rating} size={13} />
+                <p className="mt-3 text-sm leading-relaxed" style={{ color: "var(--muted-foreground)" }}>
+                  &ldquo;{review.text}&rdquo;
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <button onClick={prev} className="absolute -left-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border bg-white p-1.5 shadow-sm transition-colors hover:bg-gray-50 dark:bg-zinc-800 dark:hover:bg-zinc-700 md:block" style={{ borderColor: "var(--border)" }}>
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <button onClick={next} className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 rounded-full border bg-white p-1.5 shadow-sm transition-colors hover:bg-gray-50 dark:bg-zinc-800 dark:hover:bg-zinc-700 md:block" style={{ borderColor: "var(--border)" }}>
+        <ChevronRight className="h-4 w-4" />
+      </button>
+
+      <div className="mt-4 flex items-center justify-center gap-1.5">
+        {reviews.map((_, i) => (
+          <button key={i} onClick={() => setCurrent(i)}
+            className="rounded-full transition-all"
+            style={{
+              width: i === current ? "20px" : "6px",
+              height: "6px",
+              background: i === current ? "var(--accent)" : "var(--border)",
+            }} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   const { products, categories, brands, reviews, features, updateReviews } = useStore();
@@ -172,11 +238,7 @@ export default function HomePage() {
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-xl font-semibold tracking-tight">What Our Customers Say</h2>
         </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {reviews.slice(0, 3).map((review) => (
-            <ReviewCard key={review.id} review={review} />
-          ))}
-        </div>
+        <ReviewsCarousel reviews={reviews} />
       </section>
 
       <section className="mb-14">
