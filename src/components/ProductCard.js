@@ -1,13 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Heart, ShoppingCart, Check } from "lucide-react";
 import { useStore } from "@/lib/store";
 import StarRating from "./StarRating";
 
 export default function ProductCard({ product }) {
-  const { addToCart, toggleWishlist, isInWishlist } = useStore();
+  const { addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
+  const router = useRouter();
   const inWishlist = isInWishlist(product.id);
+  const inCart = isInCart(product.id);
 
   return (
     <Link href={`/products/${product.id}`}>
@@ -80,13 +83,17 @@ export default function ProductCard({ product }) {
         <button
           onClick={(e) => {
             e.preventDefault();
+            if (inCart) {
+              router.push("/cart");
+              return;
+            }
             addToCart(product, product.storage[0], product.colors[0]);
           }}
           className="flex w-full items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium text-white transition-all hover:opacity-90"
           style={{ background: "var(--accent)" }}
         >
-          <ShoppingCart size={14} />
-          Add to Cart
+          {inCart ? <Check size={14} /> : <ShoppingCart size={14} />}
+          {inCart ? "In Cart" : "Add to Cart"}
         </button>
       </div>
     </Link>

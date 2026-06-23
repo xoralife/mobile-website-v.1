@@ -81,6 +81,7 @@ export function StoreProvider({ children }) {
   };
 
   const isInWishlist = (id) => wishlist.some((item) => item.id === id);
+  const isInCart = (id) => cart.some((item) => item.id === id);
 
   return (
     <StoreContext.Provider
@@ -98,6 +99,7 @@ export function StoreProvider({ children }) {
         cartTotal,
         toggleWishlist,
         isInWishlist,
+        isInCart,
         setSearchQuery,
       }}
     >

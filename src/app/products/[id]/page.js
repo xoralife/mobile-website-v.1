@@ -1,6 +1,6 @@
 "use client";
 
-import { notFound } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronLeft, Heart, ShoppingCart, Check, Truck, Shield, RotateCcw } from "lucide-react";
@@ -10,7 +10,8 @@ import StarRating from "@/components/StarRating";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage({ params }) {
-  const { addToCart, toggleWishlist, isInWishlist } = useStore();
+  const { addToCart, toggleWishlist, isInWishlist, isInCart } = useStore();
+  const router = useRouter();
   const product = products.find((p) => p.id === Number(params.id));
   const [selectedStorage, setSelectedStorage] = useState(product?.storage[0]);
   const [selectedColor, setSelectedColor] = useState(product?.colors[0]);
@@ -19,6 +20,7 @@ export default function ProductDetailPage({ params }) {
 
   const relatedProducts = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
   const inWishlist = isInWishlist(product.id);
+  const inCart = isInCart(product.id);
   const productReviews = reviews.filter((r) => r.product === product.name);
   const discount = product.originalPrice > product.price
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
@@ -139,13 +141,19 @@ export default function ProductDetailPage({ params }) {
 
           <div className="flex gap-3">
             <button
-              onClick={() => addToCart(product, selectedStorage, selectedColor)}
+              onClick={() => {
+                if (inCart) {
+                  router.push("/cart");
+                  return;
+                }
+                addToCart(product, selectedStorage, selectedColor);
+              }}
               disabled={!product.inStock}
               className="flex flex-1 items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-medium text-white transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               style={{ background: "var(--accent)" }}
             >
-              <ShoppingCart size="17" />
-              Add to Cart
+              {inCart ? <Check size="17" /> : <ShoppingCart size="17" />}
+              {inCart ? "In Cart" : "Add to Cart"}
             </button>
             <button
               onClick={() => toggleWishlist(product)}

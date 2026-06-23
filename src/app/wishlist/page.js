@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ArrowRight, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Heart, ArrowRight, ShoppingCart, Check } from "lucide-react";
 import { useStore } from "@/lib/store";
 import StarRating from "@/components/StarRating";
 
 export default function WishlistPage() {
-  const { wishlist, toggleWishlist, addToCart, mounted } = useStore();
+  const { wishlist, toggleWishlist, addToCart, isInCart, mounted } = useStore();
+  const router = useRouter();
 
   if (!mounted) {
     return <div className="mx-auto max-w-6xl px-4 py-12" />;
@@ -70,12 +72,19 @@ export default function WishlistPage() {
             </Link>
 
             <button
-              onClick={() => addToCart(product, product.storage[0], product.colors[0])}
+              onClick={() => {
+                const inCart = isInCart(product.id);
+                if (inCart) {
+                  router.push("/cart");
+                  return;
+                }
+                addToCart(product, product.storage[0], product.colors[0]);
+              }}
               className="flex w-full items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium text-white transition-all hover:opacity-90"
               style={{ background: "var(--accent)" }}
             >
-              <ShoppingCart size="14" />
-              Add to Cart
+              {isInCart(product.id) ? <Check size="14" /> : <ShoppingCart size="14" />}
+              {isInCart(product.id) ? "In Cart" : "Add to Cart"}
             </button>
           </div>
         ))}
