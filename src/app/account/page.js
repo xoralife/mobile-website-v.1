@@ -113,28 +113,28 @@ export default function AccountPage() {
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="mb-8 text-2xl font-bold tracking-tight">My Account</h1>
+      <h1 className="mb-6 text-2xl font-bold tracking-tight sm:mb-8">My Account</h1>
 
-      <div className="grid gap-6 lg:grid-cols-4 lg:gap-8">
+      <div className="lg:grid lg:grid-cols-4 lg:gap-8">
         <div className="lg:col-span-1">
-          <nav className="flex gap-1 overflow-x-auto pb-2 lg:flex-col lg:pb-0">
+          <nav className="mb-6 flex gap-1 overflow-x-auto lg:mb-0 lg:flex-col lg:overflow-visible">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className="flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium transition-all"
+                className="flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all lg:w-full lg:py-2.5"
                 style={{
                   background: activeTab === tab.id ? "var(--muted)" : "transparent",
-                  color: "var(--foreground)",
+                  color: activeTab === tab.id ? "var(--foreground)" : "var(--muted-foreground)",
                 }}
               >
-                <tab.icon size="17" style={{ color: activeTab === tab.id ? "var(--accent)" : "var(--muted-foreground)" }} />
+                <tab.icon size="16" style={{ color: activeTab === tab.id ? "var(--accent)" : "var(--muted-foreground)" }} />
                 {tab.label}
               </button>
             ))}
-            <button className="flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-medium" style={{ color: "var(--destructive)" }}>
-              <LogOut size="17" />
-              Sign Out
+            <button className="flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium lg:w-full lg:py-2.5" style={{ color: "var(--destructive)" }}>
+              <LogOut size="16" />
+              <span className="hidden sm:inline">Sign Out</span>
             </button>
           </nav>
         </div>
