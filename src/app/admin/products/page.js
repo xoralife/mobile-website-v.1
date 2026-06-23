@@ -55,16 +55,16 @@ export default function AdminProducts() {
     };
 
     if (editing) {
-      setProducts((prev) => prev.map((p) => (p.id === editing ? parsed : p)));
+      updateProducts(products.map((p) => (p.id === editing ? parsed : p)));
     } else {
-      setProducts((prev) => [...prev, parsed]);
+      updateProducts([...products, parsed]);
     }
     resetForm();
   };
 
   const handleDelete = (id) => {
     if (confirm("Delete this product?")) {
-      setProducts((prev) => prev.filter((p) => p.id !== id));
+      updateProducts(products.filter((p) => p.id !== id));
     }
   };
 

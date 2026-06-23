@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { products } from "@/lib/data";
+import { useStore } from "@/lib/store";
 import { Search, ChevronDown } from "lucide-react";
 
 const statusColors = {
@@ -23,6 +23,7 @@ const initialOrders = [
 ];
 
 export default function AdminOrders() {
+  const { products } = useStore();
   const [orders, setOrders] = useState(initialOrders);
   const [search, setSearch] = useState("");
   const [openId, setOpenId] = useState(null);
